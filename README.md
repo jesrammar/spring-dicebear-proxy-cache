@@ -9,6 +9,7 @@
 
 
 
+
 Servicio **proxy** para [DiceBear](https://www.dicebear.com/) con **caché Caffeine** y **reintentos Resilience4j**.
 Reduce latencia y evita rate-limit del servicio externo.
 
