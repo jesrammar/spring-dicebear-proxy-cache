@@ -1,20 +1,23 @@
 # DiceBear Proxy + Cache (Spring Boot)
 
-[![Build](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml/badge.svg)](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml)
+[![CI - Maven](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml/badge.svg?branch=develop)](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml)
 
+Servicio **proxy** para [DiceBear](https://www.dicebear.com/) con **caché Caffeine** y **reintentos Resilience4j**.  
+Reduce latencia y evita el *rate-limit* del servicio externo.
 
+---
 
-Servicio **proxy** para [DiceBear](https://www.dicebear.com/) con **caché Caffeine** y **reintentos Resilience4j**.
-Reduce latencia y evita rate-limit del servicio externo.
+## 🚀 Stack
 
-## Stack
-- Java 21 · Spring Boot 3
-- WebClient (reactivo)
-- Caffeine Cache · Resilience4j (retry)
-- Actuator · springdoc-openapi (Swagger)
-- GitHub Actions (Maven CI)
+- ☕ **Java 21** · Spring Boot 3  
+- 🌐 **WebClient** (reactivo)  
+- ⚡ **Caffeine Cache** · **Resilience4j** (retry)  
+- 📊 **Actuator** · **springdoc-openapi** (Swagger)  
+- 🤖 **GitHub Actions** (Maven CI)  
 
-## Ejecutar
+---
+
+## ▶️ Ejecutar en local
+
 ```bash
 mvn spring-boot:run
-# Swagger: http://localhost:8080/swagger-ui
