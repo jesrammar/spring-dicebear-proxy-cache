@@ -1,6 +1,7 @@
 # DiceBear Proxy + Cache (Spring Boot)
 
-![Build](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml/badge.svg)
+[![Build](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml/badge.svg)](https://github.com/jesusctqx5w2/spring-dicebear-proxy-cache/actions/workflows/maven.yml)
+
 
 
 Servicio **proxy** para [DiceBear](https://www.dicebear.com/) con **caché Caffeine** y **reintentos Resilience4j**.
