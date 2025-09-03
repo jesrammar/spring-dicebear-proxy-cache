@@ -1,4 +1,8 @@
+package com.jesus.dicebearproxy;
+
+
 package main.java.com.jesus.dicebearproxy;
+
 
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,16 +20,32 @@ import java.util.Map;
 @Tag(name = "DiceBear Proxy")
 public class AvatarController {
 
+
+    private static final String IMAGE_SVG_XML_VALUE = "image/svg+xml";
+
+
     private final WebClient web = WebClient.builder()
             .baseUrl("https://api.dicebear.com/7.x")
             .build();
 
     @Operation(summary = "Proxy con cache y reintentos")
+
+    @GetMapping(value = "/avatar/{seed}", produces = IMAGE_SVG_XML_VALUE)
+
     @GetMapping(value = "/avatar/{seed}", produces = MediaType.IMAGE_SVG_XML_VALUE)
+
     @Cacheable(cacheNames = "avatars",
                key = "#seed + ':' + (#style==null?'adventurer':#style) + ':' + #all.toString()")
     @Retry(name = "dicebear")
     public ResponseEntity<byte[]> get(
+
+    @PathVariable("seed") String seed,
+    @RequestParam(name = "style", required = false, defaultValue = "adventurer") String style,
+    @RequestParam Map<String, String> all) {
+
+        StringBuilder qs = new StringBuilder();
+        for (Map.Entry<String, String> e : all.entrySet()) {
+
             @PathVariable String seed,
             @RequestParam(required = false, defaultValue = "adventurer") String style,
             @RequestParam Map<String, String> all) {
