@@ -23,7 +23,7 @@ public class WebClientConfig {
     return WebClient.builder()
       .baseUrl(p.baseUrl() + "/" + p.version())
       .clientConnector(new ReactorClientHttpConnector(http))
-      .defaultHeader(HttpHeaders.ACCEPT, "image/svg+xml")
+      .defaultHeader(HttpHeaders.ACCEPT, "image/svg+xml")   // <— aquí el fix
       .build();
   }
 }
