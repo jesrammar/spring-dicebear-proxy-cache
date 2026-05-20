@@ -14,11 +14,11 @@ import reactor.netty.http.client.HttpClient;
 @EnableConfigurationProperties(DiceBearProps.class)
 public class WebClientConfig {
 
-  @Bean
+  @Bean("diceBearWebClient")
   public WebClient diceBearWebClient(DiceBearProps p) {
     HttpClient http = HttpClient.create()
-      .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
-      .responseTimeout(Duration.ofSeconds(3));
+      .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, p.connectTimeoutMillis())
+      .responseTimeout(Duration.ofMillis(p.responseTimeoutMillis()));
 
     return WebClient.builder()
       .baseUrl(p.baseUrl() + "/" + p.version())

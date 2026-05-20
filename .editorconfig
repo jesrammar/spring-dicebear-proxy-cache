@@ -1,0 +1,15 @@
+root = true
+
+[*.{java,xml,properties,yml,yaml,md,sh,ps1}]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.java]
+indent_style = space
+indent_size = 4
+
+[*.{xml,yml,yaml,properties,md,sh,ps1}]
+indent_style = space
+indent_size = 2
