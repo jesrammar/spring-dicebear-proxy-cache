@@ -24,22 +24,17 @@ Pensado como proyecto de portfolio backend: pequeno en alcance, pero cuidado en 
 
 ![Postman avatar response](docs/images/postman_avatar.png)
 
-### API contract and operational visibility
+### Swagger UI
 
-<table>
-  <tr>
-    <td width="50%">
-      <img src="docs/images/swagger_capture.png" alt="Swagger UI screenshot" />
-    </td>
-    <td width="50%">
-      <img src="docs/images/postman_actuator.png" alt="Actuator health screenshot" />
-    </td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Swagger UI</strong><br/>Clean API contract for the avatar endpoint</td>
-    <td align="center"><strong>Actuator Health</strong><br/>Health endpoint exposed for runtime visibility</td>
-  </tr>
-</table>
+Clean API contract for the avatar endpoint, including request parameters and response media type.
+
+![Swagger UI screenshot](docs/images/swagger_capture.png)
+
+### Actuator health
+
+Runtime visibility through Spring Boot Actuator health checks.
+
+![Actuator health screenshot](docs/images/postman_actuator.png)
 
 ## What this repository demonstrates
 
