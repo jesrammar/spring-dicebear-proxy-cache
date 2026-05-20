@@ -1,0 +1,123 @@
+{
+  "info": {
+    "_postman_id": "a6ce1da4-2c91-4b14-9e6f-9fc1cfd1db7d",
+    "name": "spring-dicebear-proxy-cache",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Coleccion de Postman para probar los endpoints principales del proyecto spring-dicebear-proxy-cache."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Avatar - estilo por defecto",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/avatar/testuser",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "avatar",
+            "testuser"
+          ]
+        },
+        "description": "Genera un avatar SVG usando el estilo por defecto."
+      },
+      "response": []
+    },
+    {
+      "name": "Avatar - estilo bottts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/avatar/testuser?style=bottts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "avatar",
+            "testuser"
+          ],
+          "query": [
+            {
+              "key": "style",
+              "value": "bottts"
+            }
+          ]
+        },
+        "description": "Genera un avatar SVG usando un estilo explicito."
+      },
+      "response": []
+    },
+    {
+      "name": "Actuator - health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "actuator",
+            "health"
+          ]
+        },
+        "description": "Comprueba el estado basico del servicio."
+      },
+      "response": []
+    },
+    {
+      "name": "Actuator - info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/info",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "actuator",
+            "info"
+          ]
+        },
+        "description": "Devuelve metadata basica de build y aplicacion."
+      },
+      "response": []
+    },
+    {
+      "name": "Avatar - estilo invalido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/avatar/testuser?style=bad/style",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "avatar",
+            "testuser"
+          ],
+          "query": [
+            {
+              "key": "style",
+              "value": "bad/style"
+            }
+          ]
+        },
+        "description": "Ejemplo de validacion fallida para comprobar la respuesta 400."
+      },
+      "response": []
+    }
+  ]
+}

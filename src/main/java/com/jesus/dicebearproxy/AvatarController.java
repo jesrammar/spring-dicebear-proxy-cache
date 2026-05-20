@@ -34,16 +34,16 @@ public class AvatarController {
     }
 
     @Operation(
-            summary = "Generate avatar SVG through DiceBear proxy",
-            description = "Returns an SVG avatar generated from the provided seed. "
-                    + "If style is not provided, the default style is adventurer.")
+            summary = "Genera un avatar SVG a traves del proxy DiceBear",
+            description = "Devuelve un avatar SVG generado a partir del seed indicado. "
+                    + "Si no se informa el estilo, se usa adventurer por defecto.")
     @GetMapping(value = "/{seed}", produces = "image/svg+xml")
     public ResponseEntity<byte[]> getAvatar(
-            @Parameter(description = "Unique avatar seed", example = "testuser")
+            @Parameter(description = "Seed unico para generar el avatar", example = "testuser")
             @PathVariable
             @Size(min = 1, max = 100, message = "seed must be between 1 and 100 characters")
             String seed,
-            @Parameter(description = "DiceBear style", example = "bottts")
+            @Parameter(description = "Estilo de DiceBear", example = "bottts")
             @RequestParam(name = "style", required = false)
             @Pattern(
                     regexp = "^[a-zA-Z0-9-]{1,40}$",

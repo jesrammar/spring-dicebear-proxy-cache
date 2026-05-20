@@ -18,31 +18,31 @@ API backend en Spring Boot que actua como proxy hacia [DiceBear](https://www.dic
 
 Pensado como proyecto de portfolio backend: pequeno en alcance, pero cuidado en arquitectura, testing, operabilidad y presentacion.
 
-## Preview
+## Vista previa
 
-### Avatar generation through the proxy
+### Generacion de avatar a traves del proxy
 
 ![Postman avatar response](docs/images/postman_avatar.png)
 
 ### Swagger UI
 
-Clean API contract for the avatar endpoint, including request parameters and response media type.
+Contrato de API limpio para el endpoint principal, incluyendo parametros y tipo de respuesta.
 
 ![Swagger UI screenshot](docs/images/swagger_capture.png)
 
 ### Actuator health
 
-Runtime visibility through Spring Boot Actuator health checks.
+Visibilidad basica del servicio mediante el health check de Spring Boot Actuator.
 
 ![Actuator health screenshot](docs/images/postman_actuator.png)
 
-## What this repository demonstrates
+## Que demuestra este repositorio
 
-- Backend integration with an external provider through a dedicated HTTP client.
-- Clear separation between controller, application service and infrastructure concerns.
-- Cache and retry patterns applied to a realistic API use case.
-- Deterministic automated testing without depending on external network access.
-- Operational basics such as health endpoints, metrics and CI verification.
+- Integracion backend con un proveedor externo a traves de un cliente HTTP dedicado.
+- Separacion clara entre controller, application service e infraestructura.
+- Uso de cache y retry sobre un caso de uso realista de API.
+- Testing automatizado determinista sin depender de red externa.
+- Bases de operabilidad como health checks, metricas y verificacion en CI.
 
 ## Que resuelve
 
@@ -90,6 +90,20 @@ Ejemplos:
 curl "http://localhost:8080/avatar/demo-user?style=bottts"
 curl "http://localhost:8080/avatar/demo-user?style=adventurer&size=64"
 ```
+
+## Coleccion de Postman
+
+El repositorio incluye una coleccion exportada de Postman para probar rapidamente los endpoints principales:
+
+- avatar por defecto
+- avatar con estilo
+- health check
+- metadata de la aplicacion
+- caso de error por estilo invalido
+
+Archivo:
+
+`docs/postman/spring-dicebear-proxy-cache.postman_collection.json`
 
 ## Endpoints utiles
 
@@ -183,6 +197,14 @@ mvn -B -ntp verify
 - La llamada al proveedor externo esta encapsulada para facilitar testing y evolucion futura.
 - Los errores del upstream se traducen a `502 Bad Gateway`, que es una semantica razonable para un proxy backend.
 - Actuator expone `health`, `info` y `metrics`, y `info` incluye metadata de build generada por Maven.
+
+## Como lo explicaria en entrevista
+
+- `WebClient`: desacopla la llamada al proveedor externo y facilita evolucion futura.
+- `Caffeine`: evita repetir llamadas iguales cuando el seed y el estilo se repiten.
+- `Resilience4j retry`: protege frente a fallos transitorios del upstream.
+- `WireMock`: permite tests fiables sin depender de internet ni del estado real de DiceBear.
+- `Actuator`: añade salud y metricas basicas para observabilidad del servicio.
 
 ## Objetivo del repositorio
 
