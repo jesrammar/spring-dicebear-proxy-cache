@@ -1,74 +1,54 @@
 package com.jesus.dicebearproxy;
 
-import io.github.resilience4j.retry.annotation.Retry;
+import com.jesus.dicebearproxy.application.AvatarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.Map;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
+@RequestMapping("/avatar")
 @Tag(name = "DiceBear Proxy")
 public class AvatarController {
 
-    private static final Logger log = LoggerFactory.getLogger(AvatarController.class);
-    private static final String IMAGE_SVG_XML_VALUE = "image/svg+xml";
+    private static final MediaType SVG_MEDIA_TYPE = MediaType.parseMediaType("image/svg+xml; charset=utf-8");
+    private final AvatarService avatarService;
 
-    private final WebClient web = WebClient.builder()
-            .baseUrl("https://api.dicebear.com/7.x")
-            .build();
-
-    @Operation(summary = "Proxy con cache y reintentos")
-    @GetMapping(value = "/avatar/{seed}", produces = IMAGE_SVG_XML_VALUE)
-    @Cacheable(
-        cacheNames = "avatars",
-        key = "#seed + ':' + (#style==null?'adventurer':#style) + ':' + #all.toString()"
-    )
-    @Retry(name = "dicebear")
-    public ResponseEntity<byte[]> get(
-            @PathVariable("seed") String seed,
-            @RequestParam(name = "style", required = false, defaultValue = "adventurer") String style,
-            @RequestParam Map<String, String> all) {
-
-        log.info("Generating avatar -> seed={}, style={}, params={}", seed, style, all);
-
-        StringBuilder qs = new StringBuilder();
-        for (Map.Entry<String, String> e : all.entrySet()) {
-            if (qs.length() > 0) qs.append('&');
-            qs.append(URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8))
-              .append('=')
-              .append(URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8));
-        }
-
-        if (!all.containsKey("seed")) {
-            if (qs.length() > 0) qs.append('&');
-            qs.append("seed=").append(URLEncoder.encode(seed, StandardCharsets.UTF_8));
-        }
-
-        String uri = "/" + style + "/svg" + (qs.length() > 0 ? "?" + qs : "");
-
-    try {
-        byte[] body = web.get().uri(uri).retrieve().bodyToMono(byte[].class).block();
-
-        HttpHeaders h = new HttpHeaders();
-        h.setContentType(MediaType.valueOf("image/svg+xml; charset=utf-8"));
-        h.setCacheControl("public, max-age=86400");
-
-        log.info("Avatar generated successfully for seed={}", seed);
-        return new ResponseEntity<>(body, h, HttpStatus.OK);
-
-    } catch (Exception ex) {
-        log.error("Error generating avatar for seed={}, style={}: {}", seed, style, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                .body(("Error fetching avatar: " + ex.getMessage()).getBytes(StandardCharsets.UTF_8));
+    public AvatarController(AvatarService avatarService) {
+        this.avatarService = avatarService;
     }
 
+    @Operation(summary = "Proxy de avatars con cache y reintentos")
+    @GetMapping(value = "/{seed}", produces = "image/svg+xml")
+    public ResponseEntity<byte[]> getAvatar(
+            @PathVariable
+            @Size(min = 1, max = 100, message = "seed must be between 1 and 100 characters")
+            String seed,
+            @RequestParam(name = "style", required = false)
+            @Pattern(
+                    regexp = "^[a-zA-Z0-9-]{1,40}$",
+                    message = "style must contain only letters, numbers or hyphens")
+            String style,
+            @RequestParam Map<String, String> allParams) {
+
+        byte[] body = avatarService.getAvatarSvg(seed, style, allParams);
+
+        return ResponseEntity.ok()
+                .contentType(SVG_MEDIA_TYPE)
+                .cacheControl(CacheControl.maxAge(java.time.Duration.ofHours(24)).cachePublic())
+                .header(HttpHeaders.VARY, "Accept")
+                .body(body);
     }
 }

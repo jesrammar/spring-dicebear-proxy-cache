@@ -12,6 +12,8 @@
         <java.version>21</java.version>
         <spring.boot.version>3.3.2</spring.boot.version>
         <resilience4j.version>2.2.0</resilience4j.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
     <dependencyManagement>
@@ -23,14 +25,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
-            <dependency>
-  <groupId>org.wiremock</groupId>
-  <artifactId>wiremock-jetty12</artifactId>
-  <version>3.6.0</version>
-  <scope>test</scope>
-</dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -96,14 +90,14 @@
         </dependency>
 
         <dependency>
-                <groupId>org.springframework.boot</groupId>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
-            <version>2.35.2</version>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-jetty12</artifactId>
+            <version>3.6.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -116,6 +110,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
 
@@ -127,6 +128,25 @@
                     <executions>
                         <execution><goals><goal>prepare-agent</goal></goals></execution>
                         <execution><id>report</id><phase>verify</phase><goals><goal>report</goal></goals></execution>
+                        <execution>
+                            <id>check</id>
+                            <phase>verify</phase>
+                            <goals><goal>check</goal></goals>
+                            <configuration>
+                                <rules>
+                                    <rule>
+                                        <element>BUNDLE</element>
+                                        <limits>
+                                            <limit>
+                                                <counter>LINE</counter>
+                                                <value>COVEREDRATIO</value>
+                                                <minimum>0.35</minimum>
+                                            </limit>
+                                        </limits>
+                                    </rule>
+                                </rules>
+                            </configuration>
+                        </execution>
                     </executions>
             </plugin>
 
@@ -136,8 +156,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <release>${maven.compiler.release}</release>
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>

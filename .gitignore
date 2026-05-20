@@ -1,2 +1,8 @@
-# Maven
 target/
+.idea/
+.vscode/
+*.iml
+*.log
+*.class
+Thumbs.db
+Desktop.ini
