@@ -2,6 +2,7 @@ package com.jesus.dicebearproxy;
 
 import com.jesus.dicebearproxy.application.AvatarService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -23,25 +24,32 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "DiceBear Proxy")
 public class AvatarController {
 
-    private static final MediaType SVG_MEDIA_TYPE = MediaType.parseMediaType("image/svg+xml; charset=utf-8");
+    private static final MediaType SVG_MEDIA_TYPE =
+            MediaType.parseMediaType("image/svg+xml; charset=utf-8");
+
     private final AvatarService avatarService;
 
     public AvatarController(AvatarService avatarService) {
         this.avatarService = avatarService;
     }
 
-    @Operation(summary = "Proxy de avatars con cache y reintentos")
+    @Operation(
+            summary = "Generate avatar SVG through DiceBear proxy",
+            description = "Returns an SVG avatar generated from the provided seed. "
+                    + "If style is not provided, the default style is adventurer.")
     @GetMapping(value = "/{seed}", produces = "image/svg+xml")
     public ResponseEntity<byte[]> getAvatar(
+            @Parameter(description = "Unique avatar seed", example = "testuser")
             @PathVariable
             @Size(min = 1, max = 100, message = "seed must be between 1 and 100 characters")
             String seed,
+            @Parameter(description = "DiceBear style", example = "bottts")
             @RequestParam(name = "style", required = false)
             @Pattern(
                     regexp = "^[a-zA-Z0-9-]{1,40}$",
                     message = "style must contain only letters, numbers or hyphens")
             String style,
-            @RequestParam Map<String, String> allParams) {
+            @Parameter(hidden = true) @RequestParam Map<String, String> allParams) {
 
         byte[] body = avatarService.getAvatarSvg(seed, style, allParams);
 

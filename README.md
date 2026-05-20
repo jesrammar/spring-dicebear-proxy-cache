@@ -16,6 +16,34 @@
 
 API backend en Spring Boot que actua como proxy hacia [DiceBear](https://www.dicebear.com/), incorporando cache con Caffeine, retry con Resilience4j, documentacion OpenAPI y endpoints de observabilidad con Actuator.
 
+Pensado como proyecto de portfolio backend: pequeno en alcance, pero cuidado en arquitectura, testing, operabilidad y presentacion.
+
+## Preview
+
+### Avatar generation through the proxy
+
+![Postman avatar response](docs/images/postman_avatar.png)
+
+### Swagger UI
+
+Clean API contract for the avatar endpoint, including request parameters and response media type.
+
+![Swagger UI screenshot](docs/images/swagger_capture.png)
+
+### Actuator health
+
+Runtime visibility through Spring Boot Actuator health checks.
+
+![Actuator health screenshot](docs/images/postman_actuator.png)
+
+## What this repository demonstrates
+
+- Backend integration with an external provider through a dedicated HTTP client.
+- Clear separation between controller, application service and infrastructure concerns.
+- Cache and retry patterns applied to a realistic API use case.
+- Deterministic automated testing without depending on external network access.
+- Operational basics such as health endpoints, metrics and CI verification.
+
 ## Que resuelve
 
 - Evita acoplar el cliente directamente a un proveedor externo.
